@@ -25,13 +25,17 @@ class NotificationController {
   }
 
   async update(req, res) {
-    const notification = await Notification.findOneAndUpdate(
-      req.params.id,
-      { read: true },
-      { new: true }
-    );
+    const notification = await Notification.findById(req.params.id);
 
-    return res.json(notification);
+    if (!notification) {
+      return res.status(404).json({
+        error: 'This notification do not found',
+      });
+    }
+
+    await notification.update({ read: true });
+
+    return res.json();
   }
 }
 
