@@ -25,7 +25,11 @@ class NotificationController {
   }
 
   async update(req, res) {
-    const notification = await Notification.findById(req.params.id);
+    const notification = await Notification.findByIdAndUpdate(
+      req.params.id,
+      { read: true },
+      { new: true }
+    );
 
     if (!notification) {
       return res.status(404).json({
@@ -33,9 +37,7 @@ class NotificationController {
       });
     }
 
-    await notification.update({ read: true });
-
-    return res.json();
+    return res.json(notification);
   }
 }
 
